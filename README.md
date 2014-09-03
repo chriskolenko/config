@@ -2,15 +2,15 @@ config
 ======
 
 a simple configuration package for Go applications capable of loading
-configuration data from [TOML](https://github.com/mojombo/toml) files
+configuration data from [`toml`](https://github.com/mojombo/toml) files
 and/or environment variables. The package is a simple wrapper around the
-[`flag.FlagSet`](http://golang.org/pkg/flag/) package, and can be used
+[`flag.FlagSet`](http://golang.org/pkg/flag/) package and can be used
 in pretty much the same way.
 
 Credit
 ------
 
-This is an adaptation of [go-toml-config](https://github.com/stvp/go-toml-config).
+This is an adaptation of [`go-toml-config`](https://github.com/stvp/go-toml-config).
 Thanks to the original authors for their work.
 
 Example
@@ -25,6 +25,15 @@ country = "USA"
 enabled = true
 population = 432427
 temperature = 99.6
+```
+
+Or with
+
+```sh
+export MY_APP_COUNTRY=USA
+export MY_APP_ATLANTA_ENABLED=false
+export MY_APP_ATLANTA_POPULATION=0
+export MY_APP_ATLANTA_TEMPERATURE=0
 ```
 
 Use:
@@ -44,6 +53,3 @@ func main() {
   config.Parse("/path/to/my_app.conf")
 }
 ```
-
-By setting the prefix `MY_APP_` you can set or override configuration
-with environment variables. For example, `MY_APP_COUNTRY=FR`
