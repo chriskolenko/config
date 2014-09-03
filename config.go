@@ -202,10 +202,7 @@ func (c *ConfigSet) loadEnvVars(environ map[string]string) error {
 		}
 		key = strings.ToLower(key)
 		key = strings.Replace(key, "_", "-", -1)
-		err := c.Set(key[len(c.prefix):], value)
-		if err != nil {
-			return err
-		}
+		c.Set(key[len(c.prefix):], value)
 	}
 	return nil
 }
