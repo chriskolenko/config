@@ -129,10 +129,16 @@ func (c *ConfigSet) Var(value flag.Value, name string) {
 // Parse takes a path to a TOML file and loads it. This must be called after
 // all the config flags in the ConfigSet have been defined but before the flags
 // are accessed by the program.
+//
+// If the path is empty, no TOML file is loaded. Only environment variables
+// matching the application Prefix will populate the config flags.
 func (c *ConfigSet) Parse(path string) error {
 	data, err := ioutil.ReadFile(path)
-	if err != nil {
+	switch {
+	case err != nil && len(path) != 0:
 		return err
+	case err != nil && len(path) == 0:
+		data = []byte{}
 	}
 	return c.ParseBytes(data)
 }
