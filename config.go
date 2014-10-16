@@ -182,8 +182,17 @@ func (c *ConfigSet) loadTomlTree(tree *toml.TomlTree, path []string) error {
 		} else {
 			fullPath := strings.Join(append(path, key), "-")
 			fullPath = strings.Replace(fullPath, "_", "-", -1)
-			// TODO handle array types (string, int, float, etc)
-			// TODO handle tables [[ ]]
+			switch v := value.(type) {
+			case []interface{}:
+				var items []string
+				for _, item := range v {
+					items = append(items, fmt.Sprintf("%v", item))
+				}
+				value = strings.Join(items, ",")
+				fmt.Println(value)
+			}
+			// TODO(bradrydzewski) handle []int, []int64, []float64, []float, etc
+			// TODO(bradrydzewski) handle tables [[ ]] as map[interface{}]interface{}
 			err := c.Set(fullPath, fmt.Sprintf("%v", value))
 			if err != nil {
 				return err
