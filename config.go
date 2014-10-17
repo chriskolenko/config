@@ -189,7 +189,6 @@ func (c *ConfigSet) loadTomlTree(tree *toml.TomlTree, path []string) error {
 					items = append(items, fmt.Sprintf("%v", item))
 				}
 				value = strings.Join(items, ",")
-				fmt.Println(value)
 			}
 			// TODO(bradrydzewski) handle []int, []int64, []float64, []float, etc
 			// TODO(bradrydzewski) handle tables [[ ]] as map[interface{}]interface{}
