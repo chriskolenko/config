@@ -2,8 +2,6 @@ package config
 
 import (
 	"flag"
-	"fmt"
-	"strings"
 	"testing"
 )
 
@@ -31,7 +29,6 @@ name = "neat dude"
 `)
 
 func testParse(t *testing.T, c *ConfigSet) {
-	var cities StringArr
 
 	boolSetting := c.Bool("my-bool", false)
 	intSetting := c.Int("my-int", 0)
@@ -42,7 +39,7 @@ func testParse(t *testing.T, c *ConfigSet) {
 	float64Setting := c.Float64("my-bigfloat", 0)
 	nestedSetting := c.String("section-name", "")
 	deepNestedSetting := c.String("places-california-name", "")
-	c.Var(&cities, "cities")
+	cities := c.Strings("cities")
 
 	err := c.ParseBytes(config)
 	if err != nil {
@@ -76,7 +73,7 @@ func testParse(t *testing.T, c *ConfigSet) {
 	if *deepNestedSetting != "neat dude" {
 		t.Error("deepNested setting should be \"neat dude\", is", *deepNestedSetting)
 	}
-	if len(cities) != 5 {
+	if len(*cities) != 5 {
 		t.Error("string array should have 5 items, is", cities)
 	}
 }
@@ -84,20 +81,4 @@ func testParse(t *testing.T, c *ConfigSet) {
 func TestParse(t *testing.T) {
 	testParse(t, globalConfig)
 	testParse(t, NewConfigSet("App Config", flag.ExitOnError))
-}
-
-// Custom Types --
-
-type StringArr []string
-
-func (s *StringArr) String() string {
-	return fmt.Sprint(*s)
-}
-
-func (s *StringArr) Set(value string) error {
-	for _, str := range strings.Split(value, ",") {
-		str = strings.TrimSpace(str)
-		*s = append(*s, str)
-	}
-	return nil
 }

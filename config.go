@@ -119,6 +119,13 @@ func (c *ConfigSet) Duration(name string, value time.Duration) *time.Duration {
 	return c.FlagSet.Duration(name, value, "")
 }
 
+// Strings defines a string slice config variable with a given name.
+func (c *ConfigSet) Strings(name string) *StringParams {
+	p := new(StringParams)
+	c.FlagSet.Var(p, name, "")
+	return p
+}
+
 // Var defines a flag with the specified name and usage string. The type and
 // value of the flag are represented by the first argument, of type Value, which
 // typically holds a user-defined implementation of Value.
@@ -344,6 +351,11 @@ func Duration(name string, value time.Duration) *time.Duration {
 	return globalConfig.Duration(name, value)
 }
 
+// Strings defines a string slice config variable with a given name.
+func Strings(name string) *StringParams {
+	return globalConfig.Strings(name)
+}
+
 // Var defines a flag with the specified name and usage string. The type and value of the
 // flag are represented by the first argument, of type Value, which typically holds a
 // user-defined implementation of Value.
@@ -363,4 +375,20 @@ func Parse(path string) error {
 // but before the flags are accessed by the program.
 func ParseBytes(path string) error {
 	return globalConfig.Parse(path)
+}
+
+// -- Custom Types
+
+type StringParams []string
+
+func (s *StringParams) String() string {
+	return fmt.Sprint(*s)
+}
+
+func (s *StringParams) Set(value string) error {
+	for _, ss := range strings.Split(value, ",") {
+		ss = strings.TrimSpace(ss)
+		*s = append(*s, ss)
+	}
+	return nil
 }
