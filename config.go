@@ -227,7 +227,7 @@ func (c *ConfigSet) loadEnvVars(environ map[string]string) error {
 func parseEnvVars(environ []string) map[string]string {
 	envs := map[string]string{}
 	for _, env := range environ {
-		parts := strings.Split(env, "=")
+		parts := strings.SplitN(env, "=", 2)
 		if len(parts) != 2 {
 			continue
 		}
