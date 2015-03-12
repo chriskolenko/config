@@ -373,8 +373,8 @@ func Parse(path string) error {
 // ParseBytes takes a TOML file in byte array format and loads it into the
 // global ConfigSet. This must be called after all config flags have been defined
 // but before the flags are accessed by the program.
-func ParseBytes(path string) error {
-	return globalConfig.Parse(path)
+func ParseBytes(data []byte) error {
+	return globalConfig.ParseBytes(data)
 }
 
 // -- Custom Types
